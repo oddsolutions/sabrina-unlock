@@ -6,4 +6,4 @@
 
 DIR=$(dirname $(realpath $0))
 dd if=$DIR/../bootloader/sabrina.bootloader.factory.2020-07-13.img of=$DIR/../bootloader/sabrina.bootloader.enc.img skip=258 count=6314 bs=256
-openssl enc -aes-256-cbc -nopad -d -K $key -iv $iv -in $DIR/../bootloader/sabrina.bootloader.enc.img -out $DIR/../bootloader/sabrina.bootloader.plain.img
+openssl enc -aes-256-cbc -nopad -d -K 7F9381074A7D1B42A7407EE83B112D9D9F6EAA74E402321C52734BDAA954511C -iv CE68BBE61FC7B79146E2C32ABF0E0A9B -in $DIR/../bootloader/sabrina.bootloader.enc.img -out $DIR/../bootloader/sabrina.bootloader.plain.img
