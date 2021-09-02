@@ -18,6 +18,9 @@ else
 printf "\n"
 fi
 
+command -v fastboot >/dev/null 2>&1 || { echo >&2 "fastboot is not found, please install: android-tools-fastboot (Debian-based) / android-tools (Arch-based)."; exit 1; }
+ldconfig -p | grep libusb-0.1.so.4 >/dev/null 2>&1 || { echo >&2 "libusb-0.1-4 is not found, please install: libusb-dev (Debian-based) / libusb-compat (Arch-based)."; exit 1; }
+
 echo -e "\e[36m"
 echo -e "---------------------------------------"
 echo -e "Please plug unplug your CCWGTV from HDMI/USB. Please also have a USB-A to USB-C cable ready and attached to your host machine."
