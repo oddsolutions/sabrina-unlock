@@ -18,7 +18,8 @@ else
 printf "\n"
 fi
 
-command -v fastboot >/dev/null 2>&1 || { echo >&2 "fastboot is not found, please install: android-tools-fastboot (Debian-based) / android-tools (Arch-based)."; exit 1; }
+command -v fastboot >/dev/null 2>&1 || { echo >&2 "fastboot is not in PATH, please ensure the SDK platform tools (https://developer.android.com/studio/releases/platform-tools) are in PATH."; exit 1; }
+command -v mke2fs >/dev/null 2>&1 || { echo >&2 "mke2fs is not in PATH, please ensure the SDK platform tools (https://developer.android.com/studio/releases/platform-tools) are in PATH."; exit 1; }
 ldconfig -p | grep libusb-0.1.so.4 >/dev/null 2>&1 || { echo >&2 "libusb-0.1-4 is not found, please install: libusb-dev (Debian-based) / libusb-compat (Arch-based)."; exit 1; }
 
 echo -e "\e[36m"
@@ -28,7 +29,7 @@ echo -e "This exploit may take a few tries to succeed, you will be walked throug
 echo -e "---------------------------------------"
 echo -e "${RST}"
 
-until [ "$success_status" == "yes" ]
+until [ "$success_status" == "yes" ] || [ "$success_status" == "Yes" ]
 do
 echo -e "\e[36m"
 echo -e "---------------------------------------"
@@ -57,8 +58,79 @@ echo -e "---------------------------------------"
 fastboot getvar unlocked
 echo "If the above returned 'unlocked: yes', congratulations, your CCWGTV is now bootloader unlocked. Do not OTA the stock firmware! It will mitigate the underlying vulnerabillity used by this exploit and make recovery much harder."
 echo "If it did not return 'yes', please contact one of the authors of this exploit with details, as your setup/device configuration is an outlier."
-echo -e "Rebooting will send you into Android Recovery saying the 'System is corrupt and can't boot', using the button on the device, short press to highlight 'Factory Data Reset', then long press to select, and confirm your selection, then rebooting will remedy the situation, and your device will boot into the stock OS, freshly unlocked."
 echo -e "---------------------------------------"
 echo -e "${RST}"
+
+
+echo -e "\e[36m"
+echo -e "---------------------------------------"
+echo -e "Now, in order to prevent SetupWizard from auto-updating the device, a specific much newer factory image has to be flashed."
+echo -e "Would you like to proceed flashing this image? It will wipe userdata, and requires an internet connection."
+echo -e "---------------------------------------"
+echo -e "${RST}"
+
+read -r -p "Please type 'Yes' and press enter to flash it, or 'No' to proceed"$'\n' factory_image
+if [ "$factory_image" != "Yes" ] && [ "$factory_image" != "yes" ]
+then
+printf "\n"
+else
+wget -O sabrina-qts1.210311.008-7350836-factory.zip https://download.ods.ninja/Android/firmware/sabrina/sabrina-qts1.210311.008-7350836-factory.zip
+wget -O sabrina-qts1.200625.002.A5-factory.zip https://download.ods.ninja/Android/firmware/sabrina/sabrina-qts1.200625.002.A5-factory.zip
+unzip -o sabrina-qts1.200625.002.A5-factory.zip
+unzip -o sabrina-qts1.210311.008-7350836-factory.zip
+fastboot reboot bootloader
+fastboot flash super sabrina-qts1.200625.002.A5-factory/super.img
+fastboot flash dtb sabrina_prod_stable-user-10-QTS1.210311.008-7350836-release-keys/dt.img
+fastboot flash dtbo sabrina_prod_stable-user-10-QTS1.210311.008-7350836-release-keys/dtbo.img
+fastboot -w
+fastboot reboot fastboot
+fastboot flash boot sabrina_prod_stable-user-10-QTS1.210311.008-7350836-release-keys/boot.img
+fastboot flash recovery sabrina_prod_stable-user-10-QTS1.210311.008-7350836-release-keys/recovery.img
+fastboot flash logo sabrina_prod_stable-user-10-QTS1.210311.008-7350836-release-keys/logo.img
+fastboot flash odm sabrina_prod_stable-user-10-QTS1.210311.008-7350836-release-keys/odm.img
+fastboot flash product sabrina_prod_stable-user-10-QTS1.210311.008-7350836-release-keys/product.img
+fastboot flash system sabrina_prod_stable-user-10-QTS1.210311.008-7350836-release-keys/system.img
+fastboot flash vbmeta custom-images/disabled_vbmeta.img
+fi
+
+
+echo -e "\e[36m"
+echo -e "---------------------------------------"
+echo -e "Would you like to flash LineageOS Recovery?"
+echo -e "It is a custom recovery that allows you to flash ROMs, zip files, etc."
+echo -e "---------------------------------------"
+echo -e "${RST}"
+
+read -r -p "Please type 'Yes' and press enter to flash it, or 'No' to proceed"$'\n' custom_recovery
+if [ "$custom_recovery" != "Yes" ] && [ "$success_status" != "yes" ]
+then
+printf "\n"
+else
+fastboot flash recovery custom-images/lineage_recovery.img
+fi
+
+echo -e "\e[36m"
+echo -e "---------------------------------------"
+echo -e "Would you like to flash a Magisk patched boot image?"
+echo -e "This will root your device and allow you to install the Magisk APK"
+echo -e "---------------------------------------"
+echo -e "${RST}"
+
+read -r -p "Please type 'Yes' and press enter to flash it, or 'No' to proceed"$'\n' magisk_boot
+if [ "$magisk_boot" != "Yes" ] && [ "$success_status" != "yes" ]
+then
+printf "\n"
+else
+fastboot flash boot custom-images/magisk_boot.img
+fi
+
+fastboot reboot
+
+rm -Rf sabrina-qts1.200625.002.A5-factory*
+rm -Rf sabrina_prod_stable-user-10-QTS1.210311.008-7350836-release-keys*
+
+echo -e "---------------------------------------"
+echo -e "All done! Your device will reboot to the stock OS shortly. You CAN NOT update the device, it will either fail or brick your device. Beyond that, enjoy!"
+echo -e "---------------------------------------"
 
 exit

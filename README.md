@@ -18,6 +18,7 @@ You are solely responsible for any potential damage(s) caused to your device by 
 - Either a USB A to C, or a C to C cable
 - A PC running some flavor of 64-bit GNU Linux
 - `libusb-dev` installed
+- `fastboot` & `mke2fs` installed from the [SDK Platform tools](https://developer.android.com/studio/releases/platform-tools)
 
 <sup>1</sup>: The USB password mitigation has been enabled on units manufactured in December 2020 and after. For units manufactured before, the mitigation was enabled by software update in February 2021. To discern this, look at the `MFP` date on the bar-code sticker on the bottom of your device's box. If you've powered it on and OTA'd, your firmware version needs to be below the February 2021 patch level.
 It's not possible to disable/change the password since it's burnt into the chip (efuses).
@@ -190,6 +191,7 @@ Demo video: [Chromecast with Google TV Bootloader Unlock](https://youtu.be/HWa9m
 - Ryan Grachek (oscardagrach): Being an awesome mentor, teaching me a fair chunk of what I know about hardware security, and being a massive wealth of knowledge about most random things.
 - Chris Dibona: Being an awesome advocate of OSS software and helping ensure that we got all the source-code pertinent to the device.
 - Pierre-Hugues Husson (phh): For pointing me down the Amlogic road to begin with by letting me know Google had decided to make the ADT-3 bootloader unlockable.
+- XDA users @p0werpl & @JJ2017, who both helped experiment and find a combination of images that allowed us to skip the forced OTA in SUW.
 
 # Contribute to FOSS development on this device
 - U-Boot: [sabrina-uboot](https://github.com/npjohnson/android_external_u-boot)
