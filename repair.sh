@@ -94,22 +94,21 @@ if [ "$factory_image" != "Yes" ] && [ "$factory_image" != "yes" ]
 then
 printf "\n"
 else
-wget -O sabrina-qts1.210311.008-7350836-factory.zip https://download.ods.ninja/Android/firmware/sabrina/sabrina-qts1.210311.008-7350836-factory.zip
-wget -O sabrina-qts1.200625.002.A5-factory.zip https://download.ods.ninja/Android/firmware/sabrina/sabrina-qts1.200625.002.A5-factory.zip
-unzip -o sabrina-qts1.200625.002.A5-factory.zip
-unzip -o sabrina-qts1.210311.008-7350836-factory.zip
+wget -O sabrina-qts1.210311.036-7814738-factory.zip https://download.ods.ninja/Android/firmware/sabrina/sabrina-qts1.210311.036-7814738-factory.zip
+unzip -o sabrina-qts1.210311.036-7814738-factory.zip
 fastboot reboot bootloader
-fastboot flash super sabrina-qts1.200625.002.A5-factory/super.img
-fastboot flash dtb sabrina_prod_stable-user-10-QTS1.210311.008-7350836-release-keys/dt.img
-fastboot flash dtbo sabrina_prod_stable-user-10-QTS1.210311.008-7350836-release-keys/dtbo.img
+fastboot flash dtb sabrina-qts1.210311.036-7814738-release-keys/dt.img
+fastboot flash dtbo sabrina-qts1.210311.036-7814738-release-keys/dtbo.img
+fastboot reboot bootloader
+fastboot flash boot sabrina-qts1.210311.036-7814738-release-keys/boot.img
+fastboot flash logo sabrina-qts1.210311.036-7814738-release-keys/logo.img
+fastboot flash recovery sabrina-qts1.210311.036-7814738-release-keys/recovery.img
 fastboot -w
 fastboot reboot fastboot
-fastboot flash boot sabrina_prod_stable-user-10-QTS1.210311.008-7350836-release-keys/boot.img
-fastboot flash recovery sabrina_prod_stable-user-10-QTS1.210311.008-7350836-release-keys/recovery.img
-fastboot flash logo sabrina_prod_stable-user-10-QTS1.210311.008-7350836-release-keys/logo.img
-fastboot flash odm sabrina_prod_stable-user-10-QTS1.210311.008-7350836-release-keys/odm.img
-fastboot flash product sabrina_prod_stable-user-10-QTS1.210311.008-7350836-release-keys/product.img
-fastboot flash system sabrina_prod_stable-user-10-QTS1.210311.008-7350836-release-keys/system.img
+fastboot flash odm sabrina-qts1.210311.036-7814738-release-keys/odm.img
+fastboot flash product sabrina-qts1.210311.036-7814738-release-keys/product.img
+fastboot flash system sabrina-qts1.210311.036-7814738-release-keys/system.img
+fastboot flash vendor sabrina-qts1.210311.036-7814738-release-keys/vendor.img
 fastboot flash vbmeta custom-images/disabled_vbmeta.img
 fi
 
@@ -163,7 +162,6 @@ echo -e "${RST}"
 fastboot reboot
 fi
 
-rm -Rf sabrina-qts1.200625.002.A5-factory*
-rm -Rf sabrina_prod_stable-user-10-QTS1.210311.008-7350836-release-keys*
+rm -Rf sabrina-qts1.210311.036-7814738-release-keys*
 
 exit
