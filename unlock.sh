@@ -101,7 +101,7 @@ echo -e "---------------------------------------"
 echo -e "${RST}"
 
 read -r -p "Please type 'Yes' and press enter to flash it, or 'No' to proceed"$'\n' custom_recovery
-if [ "$custom_recovery" != "Yes" ] && [ "$success_status" != "yes" ]
+if [ "$custom_recovery" != "Yes" ] && [ "$custom_recovery" != "yes" ]
 then
 printf "\n"
 else
@@ -116,7 +116,7 @@ echo -e "---------------------------------------"
 echo -e "${RST}"
 
 read -r -p "Please type 'Yes' and press enter to flash it, or 'No' to proceed"$'\n' magisk_boot
-if [ "$magisk_boot" != "Yes" ] && [ "$success_status" != "yes" ]
+if [ "$magisk_boot" != "Yes" ] && [ "$magisk_boot" != "yes" ]
 then
 printf "\n"
 else
