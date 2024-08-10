@@ -94,21 +94,38 @@ if [ "$factory_image" != "Yes" ] && [ "$factory_image" != "yes" ]
 then
 printf "\n"
 else
-wget -O sabrina-qts1.210311.036-7814738-factory.zip https://download.ods.ninja/Android/firmware/sabrina/sabrina-qts1.210311.036-7814738-factory.zip
-unzip -o sabrina-qts1.210311.036-7814738-factory.zip
+wget -O sabrina_prod_stable-12-STTL.240508.005-12011027-release-keys.zip https://download.ods.ninja/Android/firmware/sabrina/sabrina_prod_stable-12-STTL.240508.005-12011027-release-keys.zip
+unzip -o sabrina_prod_stable-12-STTL.240508.005-12011027-release-keys.zip
 fastboot reboot bootloader
-fastboot flash dtb sabrina-qts1.210311.036-7814738-release-keys/dt.img
-fastboot flash dtbo sabrina-qts1.210311.036-7814738-release-keys/dtbo.img
+fastboot flash bootloader sabrina_prod_stable-12-STTL.240508.005-12011027-release-keys/bootloader.img
+fastboot flash dtb sabrina_prod_stable-12-STTL.240508.005-12011027-release-keys/dt.img
+fastboot flash dtbo sabrina_prod_stable-12-STTL.240508.005-12011027-release-keys/dtbo.img
 fastboot reboot bootloader
-fastboot flash boot sabrina-qts1.210311.036-7814738-release-keys/boot.img
-fastboot flash logo sabrina-qts1.210311.036-7814738-release-keys/logo.img
-fastboot flash recovery sabrina-qts1.210311.036-7814738-release-keys/recovery.img
+fastboot flash boot sabrina_prod_stable-12-STTL.240508.005-12011027-release-keys/boot.img
+fastboot flash logo sabrina_prod_stable-12-STTL.240508.005-12011027-release-keys/logo.img
+fastboot flash recovery sabrina_prod_stable-12-STTL.240508.005-12011027-release-keys/recovery.img
 fastboot -w
 fastboot reboot fastboot
-fastboot flash odm sabrina-qts1.210311.036-7814738-release-keys/odm.img
-fastboot flash product sabrina-qts1.210311.036-7814738-release-keys/product.img
-fastboot flash system sabrina-qts1.210311.036-7814738-release-keys/system.img
-fastboot flash vendor sabrina-qts1.210311.036-7814738-release-keys/vendor.img
+fastboot wipe-super sabrina_prod_stable-12-STTL.240508.005-12011027-release-keys/super_empty_all.img
+fastboot flash odm sabrina_prod_stable-12-STTL.240508.005-12011027-release-keys/odm.img
+fastboot flash product sabrina_prod_stable-12-STTL.240508.005-12011027-release-keys/product.img
+fastboot flash system sabrina_prod_stable-12-STTL.240508.005-12011027-release-keys/system.img
+fastboot flash vendor sabrina_prod_stable-12-STTL.240508.005-12011027-release-keys/vendor.img
+fastboot flash vendor sabrina_prod_stable-12-STTL.240508.005-12011027-release-keys/vbmeta.img
+fi
+
+echo -e "\e[36m"
+echo -e "---------------------------------------"
+echo -e "Would you like to flash the stock VBMeta image?"
+echo -e "This will prevent the device from _actually_ applying an OTA when it tries to."
+echo -e "---------------------------------------"
+echo -e "${RST}"
+
+read -r -p "Please type 'Yes' and press enter to flash it, or 'No' to proceed"$'\n' custom_vbmeta
+if [ "$custom_vbmeta" != "Yes" ] && [ "$custom_vbmeta" != "yes" ]
+then
+printf "\n"
+else
 fastboot flash vbmeta custom-images/disabled_vbmeta.img
 fi
 
@@ -162,6 +179,6 @@ echo -e "${RST}"
 fastboot reboot
 fi
 
-rm -Rf sabrina-qts1.210311.036-7814738-release-keys*
+rm -Rf sabrina_prod_stable-12-STTL.240508.005-12011027-release-keys*
 
 exit
