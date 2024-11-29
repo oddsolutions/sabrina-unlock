@@ -45,6 +45,7 @@ sudo "$DIR/bin/update" bl2_boot "$DIR/bootloader/sabrina.bootloader.burnmode.bin
 sleep 5s
 sudo "$DIR/bin/update" bulkcmd "mmc dev 1"
 sudo "$DIR/bin/update" mwrite "repair/dtb.img" mem dtb normal
+sudo "$DIR/bin/update" partition bootloader "repair/bootloader.img"
 sudo "$DIR/bin/update" partition _aml_dtb "repair/dtb.img"
 sudo "$DIR/bin/update" partition dtbo "repair/dtbo.img"
 sudo "$DIR/bin/update" partition boot "repair/boot.img"
